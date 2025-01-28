@@ -1,0 +1,32 @@
+<div class="box">
+    <h1>Profile</h1>
+    <div id="profile-info"></div>
+</div>
+
+<script>
+async function getProfile() {
+    const response = await fetch('/api/sessions/current', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${document.cookie.split('=')[1]}`
+        }
+    });
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+        document.getElementById('profile-info').innerHTML = `
+            <p>Nombre: ${data.payload.first_name}</p>
+            <p>Apellido: ${data.payload.last_name}</p>
+            <p>Email: ${data.payload.email}</p>
+            <p>Edad: ${data.payload.age}</p>
+            <p>Rol: ${data.payload.role}</p>
+        `;
+    } else {
+        alert(data.message);
+        window.location.href = '/login';
+    }
+}
+
+getProfile();
+</script>
