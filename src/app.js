@@ -3,6 +3,7 @@ import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import passport from 'passport';
+import dotenv from 'dotenv';
 
 import productRouter from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
@@ -12,11 +13,13 @@ import sessionRouter from './routes/sessionRouter.js';
 import __dirname from './utils/constantsUtil.js';
 import websocket from './websocket.js';
 import passportConfig from './config/passportConfig.js';
+import connectDB from './config/db.js'; // Importar la función connectDB
+
+dotenv.config();
 
 const app = express();
 
-const uri = 'mongodb://127.0.0.1:27017/entrega-final';
-mongoose.connect(uri);
+connectDB(); // Conectar a la base de datos
 
 //Handlebars Config
 app.engine('handlebars', handlebars.engine());
@@ -36,7 +39,7 @@ app.use('/api/users', userRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/', viewsRouter);
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
     console.log(`Server iniciado en el PORT ${PORT}`);
 });

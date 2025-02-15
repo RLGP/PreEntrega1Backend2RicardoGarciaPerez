@@ -1,19 +1,23 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { userModel } from '../dao/models/userModel.js';
+import { userDBManager } from '../dao/userDBManager.js';
+import { comparePassword } from '../utils/hashUtil.js';
 import passport from '../config/passportConfig.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = Router();
+const UserService = new userDBManager();
 
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await userModel.findOne({ email });
-        if (!user || !bcrypt.compareSync(password, user.password)) {
+        const user = await UserService.findUserByEmail(email);
+        if (!user || !comparePassword(password, user.password)) {
             return res.status(401).send({ status: 'error', message: 'Credentiales Invalidas' });
         }
-        const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.status(200).send({ status: 'success', token });
     } catch (error) {
         res.status(400).send({ status: 'error', message: error.message });
