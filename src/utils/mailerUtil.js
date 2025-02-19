@@ -10,11 +10,16 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    secure: false, // Use TLS
+    secure: false, 
     tls: {
         rejectUnauthorized: false
     }
 });
+
+console.log(`Nodemailer configurado con:
+  Host: ${process.env.EMAIL_HOST}
+  Port: ${process.env.EMAIL_PORT}
+  User: ${process.env.EMAIL_USER}`);
 
 export const sendMail = async (to, subject, text) => {
     const mailOptions = {
@@ -25,9 +30,10 @@ export const sendMail = async (to, subject, text) => {
     };
 
     try {
+        console.log(`Enviando email a: ${to}`);
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        console.log('Email enviado: ' + info.response);
     } catch (error) {
-        console.error('Error sending email: ', error);
+        console.error('Error al enviar el email: ', error);
     }
 };

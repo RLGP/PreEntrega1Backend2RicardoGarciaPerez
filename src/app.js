@@ -42,6 +42,11 @@ app.use('/', viewsRouter);
 const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
     console.log(`Server iniciado en el PORT ${PORT}`);
+    console.log(`Nodemailer configurado con:
+      Host: ${process.env.EMAIL_HOST}
+      Port: ${process.env.EMAIL_PORT}
+      User: ${process.env.EMAIL_USER}
+      Pass: ${process.env.EMAIL_PASS}`);
 });
 
 const io = new Server(httpServer);
