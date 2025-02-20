@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import productRouter from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(passport.initialize());
+app.use(cookieParser());
 
 //Routers
 app.use('/api/products', productRouter);

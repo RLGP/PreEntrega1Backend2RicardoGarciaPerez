@@ -8,7 +8,10 @@ dotenv.config();
 const UserService = new userDBManager();
 
 const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromExtractors([
+      ExtractJwt.fromAuthHeaderAsBearerToken(),
+      (req) => req && req.cookies ? req.cookies.jwt : null
+    ]),
     secretOrKey: process.env.JWT_SECRET
 };
 

@@ -1,11 +1,14 @@
-showButtonCart();
-
 async function addToCart(pid) {
     let cartId = localStorage.getItem('cartId');
 
     if (!cartId) {
+        const token = document.cookie.split('=')[1];
         const createCartResponse = await fetch('/api/carts', {
-            method: 'POST'
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
 
         const createCart = await createCartResponse.json();
@@ -17,11 +20,16 @@ async function addToCart(pid) {
         console.log(createCart);
 
         cartId = createCart.payload._id;
-        localStorage.setItem('cartId', cartId)
+        localStorage.setItem('cartId', cartId);
     }
 
+    const token = document.cookie.split('=')[1];
     const addProductResponse = await fetch(`/api/carts/${cartId}/product/${pid}`, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
     });
 
     const addProduct = await addProductResponse.json();
@@ -36,7 +44,7 @@ async function addToCart(pid) {
 }
 
 function showButtonCart() {
-    cartId = localStorage.getItem('cartId');
+    const cartId = localStorage.getItem('cartId');
 
     if (cartId) {
         document.querySelector('#button-cart').setAttribute("href", `/cart/${cartId}`);
