@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { productDBManager } from '../dao/productDBManager.js';
 import { uploader } from '../utils/multerUtil.js';
+import { authorize } from '../middleware/authMiddleware.js';
 
 const router = Router();
 const ProductService = new productDBManager();
@@ -15,7 +16,6 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:pid', async (req, res) => {
-
     try {
         const result = await ProductService.getProductByID(req.params.pid);
         res.send({
@@ -30,8 +30,7 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-router.post('/', uploader.array('thumbnails', 3), async (req, res) => {
-
+router.post('/', authorize(['admin']), uploader.array('thumbnails', 3), async (req, res) => {
     if (req.files) {
         req.body.thumbnails = [];
         req.files.forEach((file) => {
@@ -53,8 +52,7 @@ router.post('/', uploader.array('thumbnails', 3), async (req, res) => {
     }
 });
 
-router.put('/:pid', uploader.array('thumbnails', 3), async (req, res) => {
-
+router.put('/:pid', authorize(['admin']), uploader.array('thumbnails', 3), async (req, res) => {
     if (req.files) {
         req.body.thumbnails = [];
         req.files.forEach((file) => {
@@ -76,8 +74,7 @@ router.put('/:pid', uploader.array('thumbnails', 3), async (req, res) => {
     }
 });
 
-router.delete('/:pid', async (req, res) => {
-
+router.delete('/:pid', authorize(['admin']), async (req, res) => {
     try {
         const result = await ProductService.deleteProduct(req.params.pid);
         res.send({

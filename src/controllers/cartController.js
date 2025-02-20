@@ -20,6 +20,7 @@ export const addProductToCart = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
     try {
+        console.log('Cart ID:', req.params.cid);
         const ticket = await cartService.purchaseCart(req.params.cid);
         res.status(200).json({ status: 'success', payload: ticket });
     } catch (error) {

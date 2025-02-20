@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { productDBManager } from '../dao/productDBManager.js';
 import { cartDBManager } from '../dao/cartDBManager.js';
+import { authorize } from '../middleware/authMiddleware.js';
+import passport from '../config/passportConfig.js';
 
 const router = Router();
 const ProductService = new productDBManager();
@@ -27,7 +29,7 @@ router.get('/products', async (req, res) => {
     )
 });
 
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', passport.authenticate('jwt', { session: false }), authorize(['admin']), async (req, res) => {
     const products = await ProductService.getAllProducts(req.query);
     res.render(
         'realTimeProducts',

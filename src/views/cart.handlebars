@@ -12,4 +12,31 @@
             </div>
         {{/each}}
     </div>
+    <div class="footer">
+        <button id="button-purchase" class="button" onclick="finalizePurchase('{{../_id}}')">Finalizar Compra</button>
+    </div>
 </div>
+
+<script>
+console.log('Cart ID:', '{{../_id}}');
+
+async function finalizePurchase(cartId) {
+    const token = document.cookie.split('=')[1];
+    const response = await fetch(`/api/carts/${cartId}/purchase`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+        alert('Compra finalizada con éxito!');
+        window.location.href = '/products';
+    } else {
+        alert(data.message);
+    }
+}
+</script>

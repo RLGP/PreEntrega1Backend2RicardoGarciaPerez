@@ -4,6 +4,7 @@ import { userDBManager } from '../dao/userDBManager.js';
 import { comparePassword } from '../utils/hashUtil.js';
 import passport from '../config/passportConfig.js';
 import dotenv from 'dotenv';
+import { UserDTO } from '../dtos/userDTO.js';
 
 dotenv.config();
 
@@ -25,7 +26,8 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.status(200).send({ status: 'success', payload: req.user });
+    const userDTO = new UserDTO(req.user);
+    res.status(200).send({ status: 'success', payload: userDTO });
 });
 
 export default router;
