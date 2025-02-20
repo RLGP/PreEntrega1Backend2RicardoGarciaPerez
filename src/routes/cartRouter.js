@@ -6,7 +6,7 @@ import { getCartById, addProductToCart, purchaseCart } from '../services/cartSer
 import { authorize } from '../middleware/authMiddleware.js';
 import { validate } from '../middleware/validationMiddleware.js';
 import { ticketSchema } from '../validators/ticketValidator.js';
-import { cartController } from '../controllers/cartController.js';
+import * as cartController from '../controllers/cartController.js';
 import passport from '../config/passportConfig.js';
 
 const router = Router();
@@ -127,7 +127,10 @@ router.delete('/:cid', async (req, res) => {
         });
     }
 });
-
+router.post('/:cid/purchase', 
+    passport.authenticate('jwt', { session: false }), 
+    cartController.purchaseCart
+  );
 router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async (req, res) => {
     try {
         const cart = await getCartById(req.params.cid);
