@@ -21,7 +21,7 @@
 console.log('Cart ID:', '{{../_id}}');
 
 async function finalizePurchase(cartId) {
-    console.log('Finalizing purchase for cart ID:', cartId); // Add this log
+    console.log('Finalizing purchase for cart ID:', cartId); 
     const token = document.cookie.split('=')[1];
     const response = await fetch(`/cart/${cartId}/purchase`, {
         method: 'POST',

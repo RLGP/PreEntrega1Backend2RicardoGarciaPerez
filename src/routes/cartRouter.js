@@ -6,11 +6,18 @@ import { getCartById, addProductToCart, purchaseCart } from '../services/cartSer
 import { authorize } from '../middleware/authMiddleware.js';
 import { validate } from '../middleware/validationMiddleware.js';
 import { ticketSchema } from '../validators/ticketValidator.js';
+import { cartController } from '../controllers/cartController.js';
+import passport from '../config/passportConfig.js';
 
 const router = Router();
 const ProductService = new productDBManager();
 const CartService = new cartDBManager(ProductService);
 
+router.get('/:cid', 
+    passport.authenticate('jwt', { session: false }), 
+    cartController.getCartById
+  );
+  
 router.get('/:cid', async (req, res) => {
     try {
         const result = await getCartById(req.params.cid);
@@ -41,6 +48,11 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.post('/:cid/product/:pid', 
+    passport.authenticate('jwt', { session: false }), 
+    cartController.addProductToCart
+  );
+  
 router.post('/:cid/product/:pid', authorize(['user']), async (req, res) => {
     try {
         const result = await addProductToCart(req.params.cid, req.params.pid);

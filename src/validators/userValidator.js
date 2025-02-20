@@ -1,14 +1,14 @@
 import { body } from 'express-validator';
 
 export const userRegisterSchema = [
-    body('first_name').notEmpty().withMessage('First name is required'),
-    body('last_name').notEmpty().withMessage('Last name is required'),
-    body('email').isEmail().withMessage('Email is invalid'),
-    body('age').isInt({ min: 0 }).withMessage('Age must be a positive integer'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+    body('first_name').notEmpty().withMessage('First name es requerido'),
+    body('last_name').notEmpty().withMessage('Last name es requerido'),
+    body('email').isEmail().withMessage('Email es invalido'),
+    body('age').isInt({ min: 0 }).withMessage('Age debe ser un numero entero positivo'),
+    body('password').isLength({ min: 6 }).withMessage('Password debe ser de al menos de 6 caracteres')
 ];
 
 export const userLoginSchema = [
-    body('email').isEmail().withMessage('Email is invalid'),
-    body('password').notEmpty().withMessage('Password is required')
+    body('email').isEmail().withMessage('Email es invalido'),
+    body('password').notEmpty().withMessage('Password es requerido')
 ];
