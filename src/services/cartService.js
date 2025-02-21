@@ -15,10 +15,14 @@ export const addProductToCart = async (cid, pid) => {
     return await CartService.addProductByID(cid, pid);
 };
   
-export const purchaseCart = async (cid) => {
-    const cart = await CartService.getProductsFromCartByID(cid);
-    const insufficientStock = [];
-    let totalAmount = 0;
+export const purchaseCart = async (cid, user) => {
+  if (!user || !user.email) {
+      throw new Error('Usuario no válido');
+  }
+
+  const cart = await CartService.getProductsFromCartByID(cid);
+  const insufficientStock = [];
+  let totalAmount = 0;
     for (const item of cart.products) {
       // Usa la instancia productManager para llamar a los métodos
       const product = await productManager.getProductByID(item.product._id);
@@ -34,9 +38,10 @@ export const purchaseCart = async (cid) => {
     }
     const ticket = await TicketService.createTicket({
       amount: totalAmount,
-      purchaser: cart.user.email,
+      purchaser: user.email,
       products: cart.products
-    });
-    await CartService.deleteAllProducts(cid);
-    return ticket;
-  };
+  });
+
+  await CartService.deleteAllProducts(cid);
+  return ticket;
+};
