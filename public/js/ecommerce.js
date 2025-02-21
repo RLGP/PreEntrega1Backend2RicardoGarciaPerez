@@ -45,9 +45,15 @@ async function addToCart(pid) {
 
 function showButtonCart() {
     const cartId = localStorage.getItem('cartId');
-
+    const buttonCart = document.querySelector('#button-cart');
+    
     if (cartId) {
-        document.querySelector('#button-cart').setAttribute("href", `/cart/${cartId}`);
-        document.querySelector('.view-cart').style.display = "block";
-    }  
+        buttonCart.setAttribute("href", `/cart/${cartId}`);
+    } else {
+        buttonCart.setAttribute("href", "#");
+        buttonCart.onclick = () => alert('Primero debes agregar productos al carrito');
+    }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    showButtonCart();
+});
