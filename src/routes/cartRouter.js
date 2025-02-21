@@ -127,10 +127,12 @@ router.delete('/:cid', async (req, res) => {
         });
     }
 });
+
 router.post('/:cid/purchase', 
     passport.authenticate('jwt', { session: false }), 
     cartController.purchaseCart
-  );
+);
+
 router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async (req, res) => {
     try {
         const cart = await getCartById(req.params.cid);
