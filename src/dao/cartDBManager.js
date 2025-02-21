@@ -11,10 +11,11 @@ class cartDBManager {
     }
 
     async getProductsFromCartByID(cid) {
-        const cart = await cartModel.findOne({_id: cid}).populate('products.product');
-
-        if (!cart) throw new Error(`El carrito ${cid} no existe!`);
+        const cart = await cartModel.findOne({_id: cid})
+            .populate('products.product')
+            .populate('user');
         
+        if (!cart) throw new Error(`El carrito ${cid} no existe!`);
         return cart;
     }
 
