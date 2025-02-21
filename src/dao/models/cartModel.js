@@ -8,12 +8,16 @@ const cartSchema = new mongoose.Schema({
         ref: 'User',        // Asegúrate que el modelo de usuario se registre con el nombre "User"
         required: true 
       },
-    products: [
-        {
-            product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-            quantity: Number
+      products: [{
+        product: { 
+          type: mongoose.Schema.Types.ObjectId, 
+          ref: 'Product' 
+        },
+        quantity: { 
+          type: Number, 
+          default: 1 
         }
-    ],
+      }],
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } // Asegúrate de que esté definida así
 });
 

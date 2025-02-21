@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { productDBManager } from '../dao/productDBManager.js';
 import { uploader } from '../utils/multerUtil.js';
 import { authorize } from '../middleware/authMiddleware.js';
+import passport from '../config/passportConfig.js';
+import { productController } from '../controllers/productController.js';
 
 const router = Router();
 const ProductService = new productDBManager();
@@ -88,5 +90,17 @@ router.delete('/:pid', authorize(['admin']), async (req, res) => {
         });
     }
 });
-
+router.put('/:pid/stock', 
+    passport.authenticate('jwt', { session: false }),
+    authorize(['admin']),
+    async (req, res) => {
+      const { pid } = req.params;
+      const { stock } = req.body;
+      try {
+        const updatedProduct = await productController.updateProductStock(pid, stock);
+        res.status(200).json({ status: 'success', payload: updatedProduct });
+      } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
+      }
+  });
 export default router;
