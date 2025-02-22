@@ -143,6 +143,7 @@ router.delete('/:cid', async (req, res) => {
 
 router.post('/:cid/purchase', 
     passport.authenticate('jwt', { session: false }), 
+    authorize(['user']),
     async (req, res) => {
         try {
             const result = await cartController.purchaseCart(req, res);
@@ -162,7 +163,6 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
         const insufficientStockProducts = [];
         let totalAmount = 0;
 
-        // Primero verificamos el stock de todos los productos
         for (const item of cart.products) {
             const product = await ProductService.getProductByID(item.product._id);
             if (product.stock < item.quantity) {
@@ -174,7 +174,6 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
             }
         }
 
-        // Si hay productos sin stock suficiente, retornamos error
         if (insufficientStockProducts.length > 0) {
             const errorMessage = insufficientStockProducts
                 .map(item => `No hay suficiente stock de: ${item.productName} (Solicitado: ${item.requested}, Disponible: ${item.available})`)
@@ -185,7 +184,6 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
             });
         }
 
-        // Si hay stock suficiente de todos los productos, procedemos con la compra
         for (const item of cart.products) {
             const product = await ProductService.getProductByID(item.product._id);
             totalAmount += product.price * item.quantity;
@@ -223,7 +221,6 @@ router.get('/ticket/:tid',
                 });
             }
 
-            // Convertir el documento Mongoose a un objeto plano
             const ticketObject = ticket.toObject();
             
             res.render('ticket', {

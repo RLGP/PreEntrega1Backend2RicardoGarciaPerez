@@ -20,8 +20,7 @@ function finalizePurchase() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // En lugar de mostrar el alert y redireccionar a products,
-            // redirigimos a la vista del ticket
+
             window.location.href = `/api/carts/ticket/${data.payload._id}`;
         } else {
             alert('Error al finalizar la compra: ' + data.message);

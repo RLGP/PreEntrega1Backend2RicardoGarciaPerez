@@ -76,7 +76,6 @@ class cartDBManager {
     
             cart.products.splice(productIndex, 1);
             
-            // Asegurarse de que el usuario se mantiene al guardar
             const updatedCart = await cartModel.findByIdAndUpdate(
                 cid,
                 { products: cart.products },
@@ -91,7 +90,6 @@ class cartDBManager {
 
     async updateAllProducts(cid, products) {
 
-        //Validate if exist products
         for (let key in products) {
             await this.productDBManager.getProductByID(products[key].product);
         }

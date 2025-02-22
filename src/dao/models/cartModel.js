@@ -3,13 +3,13 @@ import mongoose from 'mongoose';
 const cartSchema = new mongoose.Schema({
     user: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'users',        // Cambiado de 'User' a 'users'
+        ref: 'users',    
         required: true 
     },
     products: [{
         product: { 
           type: mongoose.Schema.Types.ObjectId, 
-          ref: 'products'    // Cambiado de 'Product' a 'products'
+          ref: 'products'  
         },
         quantity: { 
           type: Number, 
@@ -18,5 +18,5 @@ const cartSchema = new mongoose.Schema({
     }]
 });
 
-const cartModel = mongoose.model('carts', cartSchema); // Cambiado de 'Cart' a 'carts'
+const cartModel = mongoose.model('carts', cartSchema); 
 export { cartModel };

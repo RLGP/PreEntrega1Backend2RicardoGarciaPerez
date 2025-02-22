@@ -1,3 +1,4 @@
+<!-- Solo el admin puede ver la pagina -->
 <div class="box">
     <h1>Productos</h1>
     <hr>
@@ -37,7 +38,6 @@
                 <p>Descripción: {{this.description}}</p>
                 <p>Precio: $ {{this.price}}</p>
                 <p>Stock: <span id="stock-{{this._id}}">{{this.stock}}</span></p>
-        <!-- Solo el admin debe ver la opción de actualizar -->
         <input type="number" id="newStock-{{this._id}}" value="{{this.stock}}">
         <button onclick="updateStock('{{this._id}}')">Actualizar Stock</button>
                 <button id="button-delete" onclick="deleteProduct('{{this._id}}')">Eliminar</button>
