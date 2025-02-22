@@ -24,7 +24,6 @@ export const purchaseCart = async (cid, user) => {
   const insufficientStock = [];
   let totalAmount = 0;
     for (const item of cart.products) {
-      // Usa la instancia productManager para llamar a los métodos
       const product = await productManager.getProductByID(item.product._id);
       if (product.stock < item.quantity) {
         insufficientStock.push(product._id);

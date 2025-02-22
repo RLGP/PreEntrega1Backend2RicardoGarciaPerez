@@ -14,7 +14,7 @@ import sessionRouter from './routes/sessionRouter.js';
 import __dirname from './utils/constantsUtil.js';
 import websocket from './websocket.js';
 import passportConfig from './config/passportConfig.js';
-import connectDB from './config/db.js'; // Importar la función connectDB
+import connectDB from './config/db.js'; 
 
 dotenv.config();
 

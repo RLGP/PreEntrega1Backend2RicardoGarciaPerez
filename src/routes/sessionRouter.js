@@ -18,14 +18,12 @@ router.post('/', async (req, res) => {
       if (!user || !comparePassword(password, user.password)) {
         return res.status(401).send({ status: 'error', message: 'Credenciales Invalidas' });
       }
-      // Se incluye el role en el payload
       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
       
-      // Se establece la cookie (ajusta secure según tu entorno)
       res.cookie("jwt", token, { 
         httpOnly: true, 
         secure: process.env.NODE_ENV === 'production', 
-        maxAge: 3600000 // 1 hora en milisegundos
+        maxAge: 3600000 
       });
       
       res.status(200).send({ status: 'success', token });

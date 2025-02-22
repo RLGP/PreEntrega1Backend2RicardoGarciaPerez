@@ -37,7 +37,7 @@
                 <p>Descripción: {{this.description}}</p>
                 <p>Precio: $ {{this.price}}</p>
                 <p>Stock: <span id="stock-{{this._id}}">{{this.stock}}</span></p>
-        <!-- Solo el admin debería ver la opción de actualizar -->
+        <!-- Solo el admin debe ver la opción de actualizar -->
         <input type="number" id="newStock-{{this._id}}" value="{{this.stock}}">
         <button onclick="updateStock('{{this._id}}')">Actualizar Stock</button>
                 <button id="button-delete" onclick="deleteProduct('{{this._id}}')">Eliminar</button>
@@ -50,14 +50,13 @@
       const newStock = document.getElementById('newStock-' + pid).value;
       fetch(`/api/products/${pid}/stock`, {
         method: 'PUT',
-        credentials: 'include', // para enviar cookies si se usan
+        credentials: 'include', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stock: newStock })
       })
       .then(response => response.json())
       .then(data => {
         console.log('Stock actualizado:', data);
-        // Actualiza el valor mostrado en la vista
         document.getElementById('stock-' + pid).innerText = data.payload.stock;
       })
       .catch(error => console.error(error));

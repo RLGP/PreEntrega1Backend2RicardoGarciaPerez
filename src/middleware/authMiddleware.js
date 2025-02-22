@@ -1,6 +1,6 @@
 export const authorize = (roles) => {
     return (req, res, next) => {
-        console.log('User:', req.user); // Agrega este registro
+        console.log('User:', req.user); 
         if (!req.user) {
             return res.status(401).send({ status: 'error', message: 'No autenticado' });
         }
