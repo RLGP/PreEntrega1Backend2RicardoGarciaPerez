@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
+import productModel from './dao/models/productModel.js';
+import { cartModel } from './dao/models/cartModel.js';
 import productRouter from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import viewsRouter from './routes/viewsRouter.js';
@@ -15,6 +16,10 @@ import __dirname from './utils/constantsUtil.js';
 import websocket from './websocket.js';
 import passportConfig from './config/passportConfig.js';
 import connectDB from './config/db.js'; 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
 
 dotenv.config();
 
@@ -24,7 +29,7 @@ connectDB(); // Conectar a la base de datos
 
 //Handlebars Config
 app.engine('handlebars', handlebars.engine());
-app.set('views', __dirname + '/../views');
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'handlebars');
 
 //Middlewares

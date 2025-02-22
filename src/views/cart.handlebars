@@ -40,18 +40,22 @@ function finalizePurchase() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.status === 'success') {
-            // Cambiar esta parte para redirigir al ticket en lugar de mostrar el alert
+        if (data.status === 'success' && data.payload._id) {
             window.location.href = `/api/carts/ticket/${data.payload._id}`;
         } else {
-            alert('Error al finalizar la compra: ' + data.message);
+            alert('Error al finalizar la compra: ' + (data.message || 'Error desconocido'));
         }
     })
     .catch(error => {
-        console.error(error);
-        alert('Error al procesar la compra');
+        console.error('Error:', error);
+        alert('Error al procesar la compra: ' + error.message);
     });
 }
 </script>

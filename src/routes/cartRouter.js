@@ -171,8 +171,12 @@ router.get('/ticket/:tid',
     async (req, res) => {
         try {
             const ticket = await ticketRepository.getTicketById(req.params.tid);
+            if (!ticket) {
+                return res.status(404).json({ status: 'error', message: 'Ticket no encontrado' });
+            }
             res.render('ticket', { ticket });
         } catch (error) {
+            console.error('Error al obtener el ticket:', error);
             res.status(400).json({ status: 'error', message: error.message });
         }
     }
