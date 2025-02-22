@@ -10,9 +10,9 @@
         <div class="products-list">
             {{#each ticket.products}}
                 <div class="product-item">
-                    <p><strong>Producto:</strong> {{product.title}}</p>
-                    <p><strong>Cantidad:</strong> {{quantity}}</p>
-                    <p><strong>Precio unitario:</strong> ${{product.price}}</p>
+                <p><strong>Producto:</strong> {{this.product.title}}</p>
+                <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+                <p><strong>Precio unitario:</strong> ${{this.product.price}}</p>
                 </div>
             {{/each}}
         </div>

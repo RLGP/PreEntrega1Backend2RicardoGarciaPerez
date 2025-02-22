@@ -29,8 +29,10 @@ connectDB(); // Conectar a la base de datos
 
 //Handlebars Config
 app.engine('handlebars', handlebars.engine({
-  allowProtoPropertiesByDefault: true,
-  allowProtoMethodsByDefault: true
+  runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true
+  }
 }));
 app.set('views', __dirname + '/../views');
 app.set('view engine', 'handlebars');

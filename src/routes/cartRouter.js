@@ -178,6 +178,9 @@ router.get('/ticket/:tid',
                 });
             }
             
+            // Asegúrate de que el ticket esté poblado
+            await ticket.populate('products.product');
+            
             res.render('ticket', {
                 ticket: ticket,
                 title: 'Ticket de Compra',
