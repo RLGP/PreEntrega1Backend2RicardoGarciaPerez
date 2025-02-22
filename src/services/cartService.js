@@ -38,14 +38,9 @@ export const purchaseCart = async (cid, user) => {
     const ticket = await TicketService.createTicket({
       amount: totalAmount,
       purchaser: user.email,
-      products: cart.products.map(item => ({
-          product: {
-              title: item.product.title,
-              price: item.product.price
-          },
-          quantity: item.quantity
-      }))
+      products: cart.products
   });
+
   await CartService.deleteAllProducts(cid);
   return ticket;
 };
