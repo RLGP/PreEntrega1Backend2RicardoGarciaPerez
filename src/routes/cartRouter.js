@@ -166,29 +166,39 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
         res.status(400).json({ status: 'error', message: error.message });
     }
 });
+
 router.get('/ticket/:tid', 
     passport.authenticate('jwt', { session: false }), 
     async (req, res) => {
         try {
             const ticket = await ticketRepository.getTicketById(req.params.tid);
             if (!ticket) {
-                return res.status(404).json({ 
-                    status: 'error', 
-                    message: 'Ticket no encontrado' 
-                });
+                return res.status(404).json({ status: 'error', message: 'Ticket no encontrado' });
             }
             
+            // Estructura los datos del ticket de manera más plana
+            const ticketData = {
+                code: ticket.code,
+                purchase_datetime: ticket.purchase_datetime,
+                purchaser: ticket.purchaser,
+                amount: ticket.amount,
+                products: ticket.products.map(item => ({
+                    product: {
+                        title: item.product.title,
+                        price: item.product.price
+                    },
+                    quantity: item.quantity
+                }))
+            };
+            
             res.render('ticket', {
-                ticket: ticket,
+                ticket: ticketData,
                 title: 'Ticket de Compra',
                 style: 'styles.css'
             });
         } catch (error) {
             console.error('Error al obtener el ticket:', error);
-            res.status(500).json({ 
-                status: 'error', 
-                message: error.message 
-            });
+            res.status(500).json({ status: 'error', message: error.message });
         }
     }
 );

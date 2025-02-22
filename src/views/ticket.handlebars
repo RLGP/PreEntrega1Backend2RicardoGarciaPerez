@@ -5,17 +5,20 @@
         <p><strong>Fecha:</strong> {{ticket.purchase_datetime}}</p>
         <p><strong>Comprador:</strong> {{ticket.purchaser}}</p>
         <p><strong>Monto Total:</strong> ${{ticket.amount}}</p>
-        
-        <h2>Productos Comprados:</h2>
-        <div class="products-list">
-            {{#each ticket.products}}
-                <div class="product-item">
-                    <p><strong>Producto:</strong> {{this.product.title}}</p>
-                    <p><strong>Cantidad:</strong> {{this.quantity}}</p>
-                    <p><strong>Precio unitario:</strong> ${{this.product.price}}</p>
-                </div>
-            {{/each}}
-        </div>
     </div>
-    <a href="/products" class="btn btn-primary">Volver a Productos</a>
+
+    <h2>Productos Comprados:</h2>
+    <div class="products-list">
+        {{#each ticket.products}}
+            <div class="product-item">
+                <p><strong>Producto:</strong> {{this.product.title}}</p>
+                <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+                <p><strong>Precio unitario:</strong> ${{this.product.price}}</p>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="navigation">
+        <a href="/products" class="btn btn-primary">Volver a Productos</a>
+    </div>
 </div>
