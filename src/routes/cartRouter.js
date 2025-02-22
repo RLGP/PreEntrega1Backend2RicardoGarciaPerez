@@ -171,18 +171,19 @@ router.get('/ticket/:tid',
     async (req, res) => {
         try {
             const ticket = await ticketRepository.getTicketById(req.params.tid);
+            
             if (!ticket) {
                 return res.status(404).json({ 
                     status: 'error', 
                     message: 'Ticket no encontrado' 
                 });
             }
-            
-            // Asegúrate de que el ticket esté poblado
-            await ticket.populate('products.product');
+
+            // Convertir el documento Mongoose a un objeto plano
+            const ticketObject = ticket.toObject();
             
             res.render('ticket', {
-                ticket: ticket,
+                ticket: ticketObject,
                 title: 'Ticket de Compra',
                 style: 'styles.css'
             });

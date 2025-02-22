@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-const ticketCollection = 'tickets';
-
 const ticketSchema = new mongoose.Schema({
     code: {
         type: String,
@@ -34,13 +32,15 @@ const ticketSchema = new mongoose.Schema({
     }]
 });
 
-// Añade el middleware pre para hacer el populate automáticamente
-ticketSchema.pre('find', function() {
+// Middleware para populate automático
+ticketSchema.pre('findOne', function(next) {
     this.populate('products.product');
+    next();
 });
 
-ticketSchema.pre('findOne', function() {
+ticketSchema.pre('findById', function(next) {
     this.populate('products.product');
+    next();
 });
 
-export const ticketModel = mongoose.model(ticketCollection, ticketSchema);
+export const ticketModel = mongoose.model('tickets', ticketSchema);
