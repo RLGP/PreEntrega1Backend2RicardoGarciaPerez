@@ -21,17 +21,24 @@ export const addProductToCart = async (req, res) => {
 export const purchaseCart = async (req, res) => {
   try {
       if (!req.user) {
-          return res.status(401).json({ 
-              status: 'error', 
-              message: 'Usuario no autenticado' 
+          return res.status(401).json({
+              status: 'error',
+              message: 'Usuario no autenticado'
           });
       }
+
+      const result = await cartService.purchaseCart(req.params.cid, req.user);
       
-      console.log('Finalizando compra para carrito ID:', req.params.cid);    
-      const ticket = await cartService.purchaseCart(req.params.cid, req.user);
-      res.status(200).json({ status: 'success', payload: ticket });
+      return res.status(200).json({
+          status: 'success',
+          payload: result
+      });
   } catch (error) {
-      res.status(400).json({ status: 'error', message: error.message });
+      console.error('Error en purchaseCart:', error);
+      return res.status(400).json({
+          status: 'error',
+          message: error.message
+      });
   }
 };
 

@@ -21,30 +21,48 @@ export const purchaseCart = async (cid, user) => {
   }
 
   const cart = await CartService.getProductsFromCartByID(cid);
-  const insufficientStock = [];
+  if (!cart || !cart.products || cart.products.length === 0) {
+      throw new Error('Carrito vacío o inválido');
+  }
+
+  const insufficientStockProducts = [];
   let totalAmount = 0;
 
+  // Verificar stock de todos los productos primero
   for (const item of cart.products) {
       const product = await productManager.getProductByID(item.product._id);
+      if (!product) {
+          throw new Error(`Producto no encontrado: ${item.product._id}`);
+      }
       if (product.stock < item.quantity) {
-          insufficientStock.push(product._id);
-      } else {
-          totalAmount += product.price * item.quantity;
-          await productManager.updateProduct(item.product._id, { stock: product.stock - item.quantity });
+          insufficientStockProducts.push({
+              title: product.title,
+              requested: item.quantity,
+              available: product.stock
+          });
       }
   }
 
-  if (insufficientStock.length > 0) {
-      return { error: 'Insufficient stock', products: insufficientStock };
+  if (insufficientStockProducts.length > 0) {
+      const errorMessage = insufficientStockProducts
+          .map(p => `${p.title} (Pedido: ${p.requested}, Disponible: ${p.available})`)
+          .join(', ');
+      throw new Error(`Stock insuficiente para: ${errorMessage}`);
+  }
+
+  // Procesar la compra
+  for (const item of cart.products) {
+      const product = await productManager.getProductByID(item.product._id);
+      totalAmount += product.price * item.quantity;
+      await productManager.updateProduct(item.product._id, {
+          stock: product.stock - item.quantity
+      });
   }
 
   const ticket = await TicketService.createTicket({
       amount: totalAmount,
       purchaser: user.email,
-      products: cart.products.map(item => ({
-          product: item.product._id, // Asegúrate de pasar el ID del producto
-          quantity: item.quantity
-      }))
+      products: cart.products
   });
 
   await CartService.deleteAllProducts(cid);

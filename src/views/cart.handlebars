@@ -40,22 +40,23 @@ function finalizePurchase() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
+    .then(async response => {
+        const data = await response.json();
         if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor');
+            throw new Error(data.message || 'Error en el servidor');
         }
-        return response.json();
+        return data;
     })
     .then(data => {
         if (data.status === 'success' && data.payload._id) {
             window.location.href = `/api/carts/ticket/${data.payload._id}`;
         } else {
-            alert('Error al finalizar la compra: ' + (data.message || 'Error desconocido'));
+            alert(data.message || 'Error al finalizar la compra');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error al procesar la compra: ' + error.message);
+        alert(error.message || 'Error al procesar la compra');
     });
 }
 </script>

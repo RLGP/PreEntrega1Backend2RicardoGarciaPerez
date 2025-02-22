@@ -130,27 +130,55 @@ router.delete('/:cid', async (req, res) => {
 
 router.post('/:cid/purchase', 
     passport.authenticate('jwt', { session: false }), 
-    cartController.purchaseCart
+    async (req, res) => {
+        try {
+            const result = await cartController.purchaseCart(req, res);
+            return result;
+        } catch (error) {
+            return res.status(400).json({
+                status: 'error',
+                message: error.message
+            });
+        }
+    }
 );
 
 router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async (req, res) => {
     try {
         const cart = await getCartById(req.params.cid);
-        const insufficientStock = [];
+        const insufficientStockProducts = [];
         let totalAmount = 0;
 
+        // Primero verificamos el stock de todos los productos
         for (const item of cart.products) {
             const product = await ProductService.getProductByID(item.product._id);
             if (product.stock < item.quantity) {
-                insufficientStock.push(product._id);
-            } else {
-                totalAmount += product.price * item.quantity;
-                await ProductService.updateProduct(item.product._id, { stock: product.stock - item.quantity });
+                insufficientStockProducts.push({
+                    productName: product.title,
+                    requested: item.quantity,
+                    available: product.stock
+                });
             }
         }
 
-        if (insufficientStock.length > 0) {
-            return res.status(400).json({ status: 'error', message: 'Insufficient stock for some products', insufficientStock });
+        // Si hay productos sin stock suficiente, retornamos error
+        if (insufficientStockProducts.length > 0) {
+            const errorMessage = insufficientStockProducts
+                .map(item => `No hay suficiente stock de: ${item.productName} (Solicitado: ${item.requested}, Disponible: ${item.available})`)
+                .join(', ');
+            return res.status(400).json({ 
+                status: 'error', 
+                message: errorMessage
+            });
+        }
+
+        // Si hay stock suficiente de todos los productos, procedemos con la compra
+        for (const item of cart.products) {
+            const product = await ProductService.getProductByID(item.product._id);
+            totalAmount += product.price * item.quantity;
+            await ProductService.updateProduct(item.product._id, { 
+                stock: product.stock - item.quantity 
+            });
         }
 
         const ticket = await ticketRepository.createTicket({
@@ -163,7 +191,10 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
 
         res.status(200).json({ status: 'success', payload: ticket });
     } catch (error) {
-        res.status(400).json({ status: 'error', message: error.message });
+        res.status(400).json({ 
+            status: 'error', 
+            message: 'Error al procesar la compra: ' + error.message 
+        });
     }
 });
 router.get('/ticket/:tid', 
