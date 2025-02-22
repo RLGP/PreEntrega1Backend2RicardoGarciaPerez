@@ -68,3 +68,11 @@ export const purchaseCart = async (cid, user) => {
   await CartService.deleteAllProducts(cid);
   return ticket;
 };
+
+export const removeProductFromCart = async (cid, pid) => {
+  try {
+      return await CartService.deleteProductByID(cid, pid);
+  } catch (error) {
+      throw new Error(`Error al eliminar producto del carrito: ${error.message}`);
+  }
+};

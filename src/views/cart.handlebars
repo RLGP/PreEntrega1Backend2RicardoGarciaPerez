@@ -9,6 +9,9 @@
                 <p>Categoria: {{this.product.category}}</p>
                 <p>Precio: $ {{this.product.price}}</p>
                 <p>Cantidad: {{this.quantity}}</p>
+                <button class="button-delete" onclick="removeProduct('{{this.product._id}}')">
+                    Eliminar
+                </button>
             </div>
         {{/each}}
     </div>
@@ -60,3 +63,47 @@ function finalizePurchase() {
     });
 }
 </script>
+<script>
+function removeProduct(pid) {
+    const pathname = window.location.pathname;
+    const parts = pathname.split('/');
+    const cid = parts[2];
+    const token = document.cookie.split('=')[1];
+
+    fetch(`/api/carts/${cid}/products/${pid}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Error al eliminar el producto');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al eliminar el producto');
+    });
+}
+</script>
+<style>
+.button-delete {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.button-delete:hover {
+    background-color: #cc0000;
+}
+</style>

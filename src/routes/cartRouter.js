@@ -68,20 +68,33 @@ router.post('/:cid/product/:pid', authorize(['user']), async (req, res) => {
     }
 });
 
-router.delete('/:cid/product/:pid', async (req, res) => {
-    try {
-        const result = await CartService.deleteProductByID(req.params.cid, req.params.pid);
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
+router.delete('/:cid/products/:pid',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        try {
+            if (!req.user) {
+                return res.status(401).json({
+                    status: 'error',
+                    message: 'Usuario no autenticado'
+                });
+            }
+
+            const result = await CartService.deleteProductByID(req.params.cid, req.params.pid);
+            
+            return res.status(200).json({
+                status: 'success',
+                message: 'Producto eliminado del carrito',
+                payload: result
+            });
+        } catch (error) {
+            console.error('Error al eliminar producto:', error);
+            return res.status(400).json({
+                status: 'error',
+                message: error.message
+            });
+        }
     }
-});
+);
 
 router.put('/:cid', async (req, res) => {
     try {
@@ -226,5 +239,10 @@ router.get('/ticket/:tid',
             });
         }
     }
+);
+
+router.delete('/:cid/products/:pid',
+    passport.authenticate('jwt', { session: false }),
+    cartController.removeProductFromCart
 );
 export default router;

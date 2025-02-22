@@ -19,8 +19,16 @@ class cartDBManager {
         return cart;
     }
 
-    async createCart() {
-        return await cartModel.create({products: []});
+    async createCart(userId) {
+        try {
+            const newCart = await cartModel.create({
+                products: [],
+                user: userId
+            });
+            return newCart;
+        } catch (error) {
+            throw new Error(`Error al crear carrito: ${error.message}`);
+        }
     }
 
     async addProductByID(cid, pid) {
@@ -52,18 +60,33 @@ class cartDBManager {
     }
 
     async deleteProductByID(cid, pid) {
-        await this.productDBManager.getProductByID(pid);
-
-        const cart = await cartModel.findOne({ _id: cid});
-
-        if (!cart) throw new Error(`El carrito ${cid} no existe!`);
+        try {
+            const cart = await cartModel.findById(cid);
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
     
-        let i = null;
-        const newProducts = cart.products.filter(item => item.product.toString() !== pid);
-
-        await cartModel.updateOne({ _id: cid }, { products: newProducts});
-        
-        return await this.getProductsFromCartByID(cid);
+            const productIndex = cart.products.findIndex(
+                item => item.product.toString() === pid
+            );
+    
+            if (productIndex === -1) {
+                throw new Error('Producto no encontrado en el carrito');
+            }
+    
+            cart.products.splice(productIndex, 1);
+            
+            // Asegurarse de que el usuario se mantiene al guardar
+            const updatedCart = await cartModel.findByIdAndUpdate(
+                cid,
+                { products: cart.products },
+                { new: true, runValidators: false }
+            );
+    
+            return updatedCart.products;
+        } catch (error) {
+            throw new Error(`Error al eliminar producto: ${error.message}`);
+        }
     }
 
     async updateAllProducts(cid, products) {

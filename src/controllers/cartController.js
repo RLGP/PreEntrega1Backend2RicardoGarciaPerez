@@ -66,3 +66,20 @@ export const cartController = {
       }
     }
 };
+
+export const removeProductFromCart = async (req, res) => {
+  try {
+      const { cid, pid } = req.params;
+      const result = await cartService.removeProductFromCart(cid, pid);
+      res.status(200).json({ 
+          status: 'success', 
+          message: 'Producto eliminado del carrito',
+          payload: result 
+      });
+  } catch (error) {
+      res.status(400).json({ 
+          status: 'error', 
+          message: error.message 
+      });
+  }
+};
