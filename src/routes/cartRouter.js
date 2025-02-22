@@ -172,12 +172,23 @@ router.get('/ticket/:tid',
         try {
             const ticket = await ticketRepository.getTicketById(req.params.tid);
             if (!ticket) {
-                return res.status(404).json({ status: 'error', message: 'Ticket no encontrado' });
+                return res.status(404).json({ 
+                    status: 'error', 
+                    message: 'Ticket no encontrado' 
+                });
             }
-            res.render('ticket', { ticket });
+            
+            res.render('ticket', {
+                ticket: ticket,
+                title: 'Ticket de Compra',
+                style: 'styles.css'
+            });
         } catch (error) {
             console.error('Error al obtener el ticket:', error);
-            res.status(400).json({ status: 'error', message: error.message });
+            res.status(500).json({ 
+                status: 'error', 
+                message: error.message 
+            });
         }
     }
 );
