@@ -166,5 +166,15 @@ router.post('/:cid/purchase', authorize(['user']), validate(ticketSchema), async
         res.status(400).json({ status: 'error', message: error.message });
     }
 });
-
+router.get('/ticket/:tid', 
+    passport.authenticate('jwt', { session: false }), 
+    async (req, res) => {
+        try {
+            const ticket = await ticketRepository.getTicketById(req.params.tid);
+            res.render('ticket', { ticket });
+        } catch (error) {
+            res.status(400).json({ status: 'error', message: error.message });
+        }
+    }
+);
 export default router;
