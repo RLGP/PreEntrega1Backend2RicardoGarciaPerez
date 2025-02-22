@@ -32,7 +32,6 @@ const ticketSchema = new mongoose.Schema({
     }]
 });
 
-// Middleware para populate automático
 ticketSchema.pre('findOne', function(next) {
     this.populate('products.product');
     next();

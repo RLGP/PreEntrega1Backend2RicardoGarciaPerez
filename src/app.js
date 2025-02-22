@@ -18,6 +18,7 @@ import passportConfig from './config/passportConfig.js';
 import connectDB from './config/db.js'; 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { ticketModel } from './dao/models/ticketModel.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
