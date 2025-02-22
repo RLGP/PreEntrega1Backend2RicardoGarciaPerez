@@ -43,8 +43,8 @@ function finalizePurchase() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert('Compra finalizada con éxito');
-            window.location.href = '/products';
+            // Cambiar esta parte para redirigir al ticket en lugar de mostrar el alert
+            window.location.href = `/api/carts/ticket/${data.payload._id}`;
         } else {
             alert('Error al finalizar la compra: ' + data.message);
         }
