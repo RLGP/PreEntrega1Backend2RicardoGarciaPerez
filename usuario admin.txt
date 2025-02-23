@@ -1,0 +1,4 @@
+   "email": "admin@gmail.com",
+    "password": "admin123"
+
+(el admin no puede comprar, solo los usuarios)

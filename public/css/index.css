@@ -1,108 +1,279 @@
-* {
-    background-color: black;
+/* index.css */
+
+/* Base styles */
+/* Estilos base */
+body {
+    background-color: #1a1a1a;
     color: white;
 }
 
-hr {
-    width: 100%;
-}
-
-h3 {
-    text-align: center;
+.box, 
+.product-card, 
+.login-box, 
+.register-box,
+.ticket-details,
+.cart-item,
+.profile-info,
+button,
+input,
+.products-box,
+h1, h2, h3, p,
+.footer,
+.view-cart,
+.view-products {
+    background-color: transparent !important;
 }
 
 input {
-    background: white;
+    background-color: white !important;
     color: black;
 }
 
 button, .button {
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    text-decoration: none;
+    background-color: #4CAF50 !important;
+    color: white;
 }
 
+#button-delete {
+    background-color: #f44336 !important;
+}
+
+#button-paginate {
+    background-color: #757575 !important;
+}
+
+#button-cart {
+    background-color:#4CAF50 !important;
+}
+
+hr {
+    width: 100%;
+    border-color: #333333;
+}
+
+h3 {
+    text-align: center;
+    color: #4CAF50;
+}
+
+input {
+    background: #ffffff;
+    color: #000000;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+button, .button {
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Layout containers */
 .box {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #242424;
 }
 
 .products-box {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
 }
 
+/* Product cards */
 .product-card {
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid white;
+    padding: 15px;
+    margin: 8px;
+    border: 1px solid #4CAF50;
+    border-radius: 8px;
+    background-color: #242424;
+    transition: transform 0.2s ease;
 }
 
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Forms */
 .products-form form {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
 }
 
-.products-form input {
-    margin-bottom: 5px;
-}
-
+/* Navigation elements */
 .footer {
-    margin-top: 10px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #242424;
+    text-align: center;
+}
+
+.view-cart, .view-products {
+    position: fixed;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    z-index: 100;
 }
 
 .view-cart {
-    display: none;
-    position: absolute;
-    right: 10px;
-    top: 15px;
+    right: 20px;
+    top: 20px;
 }
 
 .view-products {
-    display: block;
-    position: absolute;
-    left: 10px;
-    top: 15px;
+    left: 20px;
+    top: 20px;
 }
 
+/* Button styles */
 #button-create, #button-products {
-    background: #1da81d;
+    background-color: #4CAF50;
+    color: white;
 }
 
 #button-delete {
-    background: #d51515;
+    background-color: #f44336;
+    color: white;
 }
 
 #button-paginate {
-    background: #646464;
+    background-color: #757575;
+    color: white;
 }
 
 #button-cart {
-    background: #ffa500;
+    background-color:#4CAF50;
+    color: white;
 }
 
-Copy code
+/* Login/Register containers */
+.login-container, .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+}
+
+.login-box, .register-box {
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #4CAF50;
+    background-color: #242424;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4CAF50;
+}
+
+/* Ticket styles */
+.ticket-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #242424;
+}
+
 .ticket-details {
-    background: #fff;
+    border: 1px solid #4CAF50;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin: 20px 0;
+    background-color: #242424;
 }
 
-.product-item {
-    border-bottom: 1px solid #eee;
-    padding: 10px 0;
-    margin: 5px 0;
+/* Profile styles */
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #242424;
 }
 
-.product-item:last-child {
-    border-bottom: none;
+/* Cart styles */
+.cart-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #242424;
+}
+
+.cart-item {
+    border: 1px solid #4CAF50;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    background-color: #242424;
+}
+
+/* Buttons */
+.primary-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: #45a049;
+}
+
+.secondary-button {
+    background-color: #757575;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.secondary-button:hover {
+    background-color: #616161;
+}
+
+/* Links */
+.link {
+    color: #4CAF50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #45a049;
+    text-decoration: underline;
 }
